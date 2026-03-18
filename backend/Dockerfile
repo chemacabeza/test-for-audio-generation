@@ -7,15 +7,14 @@ FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /app
 
+# Copy the pre-downloaded Maven repository (built with: mvn dependency:go-offline -Dmaven.repo.local=./.m2)
+# This avoids any network access during the Docker build.
+COPY .m2 .m2
 COPY pom.xml ./
-
-# Download dependencies before copying source — maximises Docker layer cache.
-# If only source code changes, this layer is reused and the download is skipped.
-RUN mvn dependency:go-offline -q
-
-# Copy source and build the fat JAR (skip tests — they can run in CI)
 COPY src ./src
-RUN mvn clean package -DskipTests -q
+
+# Build fully offline using the bundled local repo
+RUN mvn clean package -DskipTests -q -Dmaven.repo.local=.m2 --offline
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Runtime — minimal JRE image (no JDK/Maven in production)

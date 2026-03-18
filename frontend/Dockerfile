@@ -11,12 +11,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 # Copy source before installing so COPY doesn't overwrite node_modules
 COPY . .
-RUN npm config set fetch-retries 10 \
-    && npm config set fetch-retry-mintimeout 20000 \
-    && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set maxsockets 3 \
-    && npm install --include=dev --no-audit --no-fund \
-    && npm run build
+# node_modules is pre-installed on the host (npm install --include=dev) and
+# copied in via COPY . . — no npm registry access needed during Docker build.
+RUN npm run build
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Serve with Nginx (tiny Alpine image)
