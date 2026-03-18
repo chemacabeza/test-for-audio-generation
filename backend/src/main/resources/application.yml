@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: tts-backend
+
+server:
+  port: 8080
+
+# OpenAI configuration – API key is read from the OPENAI_API_KEY environment variable.
+# Never hardcode the key here. Set the env variable before starting the application.
+openai:
+  api-key: ${OPENAI_API_KEY}
+  base-url: https://api.openai.com/v1
+  # Default TTS model. Can be overridden here without touching code.
+  model: gpt-4o-mini-tts
+  # Default voice when the frontend doesn't specify one.
+  default-voice: alloy
+  # Audio encoding returned to the frontend (mp3 | opus | aac | flac | wav | pcm)
+  response-format: mp3
+  # How long (seconds) to wait for OpenAI before timing out.
+  timeout-seconds: 60
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.example.tts: DEBUG
+    org.springframework.web: INFO

@@ -1,0 +1,48 @@
+/* ─── Design tokens ────────────────────────────────────────────────────────── */
+:root {
+  --color-bg:          #0d0f14;
+  --color-surface:     #161a24;
+  --color-surface-2:   #1e2434;
+  --color-border:      #2a3149;
+  --color-accent:      #6c63ff;
+  --color-accent-dim:  rgba(108, 99, 255, 0.15);
+  --color-accent-hover:#7c74ff;
+  --color-text:        #e8eaf0;
+  --color-text-muted:  #8892a4;
+  --color-error:       #ff5757;
+  --color-error-dim:   rgba(255, 87, 87, 0.12);
+  --color-success:     #34d399;
+  --color-success-dim: rgba(52, 211, 153, 0.12);
+  --radius-sm:         8px;
+  --radius-md:         12px;
+  --radius-lg:         20px;
+  --shadow-glow:       0 0 30px rgba(108, 99, 255, 0.2);
+  --transition:        0.22s ease;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+/* ─── Utility ──────────────────────────────────────────────────────────────── */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}

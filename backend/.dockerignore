@@ -1,0 +1,25 @@
+# Files/directories to exclude from the Docker build context.
+# Keeping the build context small speeds up `docker build`.
+
+# Maven build output
+target/
+
+# IDE & editor files
+.idea/
+*.iml
+.vscode/
+
+# Environment files — NEVER include secrets in the build context
+.env
+*.env
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md

@@ -1,0 +1,25 @@
+# Files/directories to exclude from the Docker build context for the frontend.
+
+# Dependencies (will be fetched inside the container)
+node_modules/
+
+# Build outputs (rebuilt inside the container)
+dist/
+
+# Git
+.git/
+.gitignore
+
+# Editor & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Docs
+*.md
+
+# Env files
+.env
+.env.local
+*.env

@@ -1,0 +1,56 @@
+.container {
+    background: var(--color-success-dim);
+    border: 1.5px solid var(--color-success);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.checkmark {
+    font-size: 1.4rem;
+}
+
+.title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-success);
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Style the native <audio> element to match the dark theme */
+.player {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-2);
+    /* modern browsers expose their own themed player; we set height for consistency */
+    height: 40px;
+    accent-color: var(--color-success);
+}
+
+.downloadLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-success);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity var(--transition);
+    align-self: flex-start;
+}
+
+.downloadLink:hover {
+    opacity: 0.75;
+}
