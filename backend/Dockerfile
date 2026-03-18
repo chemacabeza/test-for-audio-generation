@@ -1,23 +1,21 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 1: Build with Maven
 # ─────────────────────────────────────────────────────────────────────────────
-# eclipse-temurin is the recommended OpenJDK distribution and has both
-# linux/amd64 (Intel/Ubuntu) and linux/arm64 (Apple Silicon) images.
-FROM eclipse-temurin:21-jdk-alpine AS builder
+# maven:3.9-eclipse-temurin-21-alpine ships with Maven pre-installed — no wget
+# bootstrap needed, which avoids download failures in restricted Docker environments.
+FROM maven:3.9-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /app
 
-# Copy Maven wrapper first (cached unless wrapper version changes)
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
+COPY pom.xml ./
 
 # Download dependencies before copying source — maximises Docker layer cache.
 # If only source code changes, this layer is reused and the download is skipped.
-RUN ./mvnw dependency:go-offline -q
+RUN mvn dependency:go-offline -q
 
 # Copy source and build the fat JAR (skip tests — they can run in CI)
 COPY src ./src
-RUN ./mvnw clean package -DskipTests -q
+RUN mvn clean package -DskipTests -q
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Runtime — minimal JRE image (no JDK/Maven in production)
