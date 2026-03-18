@@ -5,17 +5,13 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies first (cached unless package.json changes).
-# NODE_ENV=development ensures devDependencies (including vite) are always installed.
+# Install deps and build in one RUN so node_modules/.bin is guaranteed in PATH.
+# --include=dev ensures vite (a devDependency) is always installed even if
+# NODE_ENV is set to production by a parent environment.
 COPY package.json package-lock.json* ./
-ENV NODE_ENV=development
-RUN npm ci
-
-# Copy source and build the production bundle.
-# VITE_API_BASE_URL is intentionally left empty here — in the Docker setup
-# Nginx handles the proxy from /api → backend, so no absolute URL is needed.
+# Copy source before installing so COPY doesn't overwrite node_modules
 COPY . .
-RUN npm run build
+RUN npm ci --include=dev && npm run build
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Serve with Nginx (tiny Alpine image)
