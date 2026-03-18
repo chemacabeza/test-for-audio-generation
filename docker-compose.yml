@@ -16,15 +16,13 @@ services:
       dockerfile: Dockerfile
     container_name: tts-backend
     # Read the API key from backend/.env — this is the single source of truth.
-    # env_file loads variables BEFORE the environment: block, so any environment:
-    # entry (even an empty one like ${OPENAI_API_KEY:-}) would silently override it.
-    # Keep env_file only to avoid that bug.
     env_file:
       - ./backend/.env
-    ports:
-      # Expose 8080 for direct API testing with curl / Postman.
-      # In production you can remove this and let Nginx proxy handle all traffic.
-      - "8080:8080"
+    # Use host networking so the container shares the host's network stack.
+    # This allows the backend to reach api.openai.com even when Docker bridge
+    # containers are blocked by the host firewall. Port 8080 is exposed on
+    # the host automatically — no port mapping needed.
+    network_mode: host
     healthcheck:
       test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health" ]
       interval: 15s
@@ -32,8 +30,6 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
-    networks:
-      - tts-network
 
   # ── React frontend (Nginx) ─────────────────────────────────────────────────
   frontend:
@@ -43,6 +39,10 @@ services:
     container_name: tts-frontend
     ports:
       - "80:80"
+    # Resolve 'backend' to the host gateway so Nginx can proxy to the Spring Boot
+    # backend which runs in host network mode on port 8080.
+    extra_hosts:
+      - "backend:172.17.0.1"
     depends_on:
       backend:
         condition: service_healthy
