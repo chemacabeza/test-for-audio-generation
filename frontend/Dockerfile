@@ -13,7 +13,7 @@ RUN npm ci --prefer-offline
 # VITE_API_BASE_URL is intentionally left empty here — in the Docker setup
 # Nginx handles the proxy from /api → backend, so no absolute URL is needed.
 COPY . .
-RUN npm run build
+RUN node node_modules/.bin/vite build
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Serve with Nginx (tiny Alpine image)
