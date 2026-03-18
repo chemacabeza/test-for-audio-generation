@@ -110,6 +110,30 @@ Usage: ./start.sh <command>
 
 ---
 
+### 🔑 Obtaining Your OpenAI API Key
+
+Before running the application you need a valid **OpenAI API key**. Follow these steps to create one:
+
+1. **Create an OpenAI account** — go to [https://platform.openai.com/signup](https://platform.openai.com/signup) and register (or log in if you already have an account).
+
+2. **Navigate to the API Keys page** — once logged in, open the left-hand menu, go to **API keys** or visit [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys) directly.
+
+3. **Create a new secret key**:
+   - Click **"+ Create new secret key"**.
+   - Give it a recognisable name (e.g. `ai-voice-studio-local`).
+   - Click **"Create secret key"**.
+
+4. **Copy the key immediately** — OpenAI shows the key **only once**. Copy it now and store it somewhere safe (e.g. a password manager). It looks like this:
+   ```
+   sk-proj-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+   ```
+
+5. **Add credit to your account** (if required) — new accounts may need to add a small amount of credit before the TTS API is accessible. Visit [https://platform.openai.com/account/billing](https://platform.openai.com/account/billing).
+
+> ⚠️ **Never share your key or commit it to Git.** Treat it like a password. The `.env` file (where you will paste it) is already listed in `.gitignore`.
+
+---
+
 ### First-time setup
 
 ```bash
