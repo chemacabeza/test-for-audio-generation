@@ -1,22 +1,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Stage 1: Build the React app with Node
-# ─────────────────────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Install deps and build in one RUN so node_modules/.bin is guaranteed in PATH.
-# --include=dev ensures vite (a devDependency) is always installed even if
-# NODE_ENV is set to production by a parent environment.
-COPY package.json package-lock.json* ./
-# Copy source before installing so COPY doesn't overwrite node_modules
-COPY . .
-# node_modules is pre-installed on the host (npm install --include=dev) and
-# copied in via COPY . . — no npm registry access needed during Docker build.
-RUN npm run build
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Stage 2: Serve with Nginx (tiny Alpine image)
+# Pre-built image: the React app is built on the host before running docker build.
+#   npm install --include=dev && npm run build
+# Docker only packages the resulting dist/ — no Node/npm/network access required.
 # ─────────────────────────────────────────────────────────────────────────────
 FROM nginx:alpine AS runtime
 
@@ -24,8 +9,8 @@ FROM nginx:alpine AS runtime
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/app.conf
 
-# Copy the built React app from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy the pre-built React app from the host
+COPY dist /usr/share/nginx/html
 
 EXPOSE 80
 

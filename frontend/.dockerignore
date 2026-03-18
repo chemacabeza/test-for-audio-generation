@@ -1,9 +1,9 @@
 # Files/directories to exclude from the Docker build context for the frontend.
 
-# Dependencies are pre-installed on the host and copied in (no npm download during build)
+# Dependencies are not needed — only the pre-built dist/ is copied into the image
+node_modules/
 
-# Build outputs (rebuilt inside the container)
-dist/
+# Build outputs are INCLUDED (we copy dist/ into the nginx image)
 
 # Git
 .git/

@@ -1,8 +1,10 @@
 # Files/directories to exclude from the Docker build context.
 # Keeping the build context small speeds up `docker build`.
 
-# Maven build output
-target/
+# Maven build output — EXCLUDED except the fat JAR we copy in.
+# target/ is NOT excluded: we COPY target/*.jar into the image.
+# Only exclude the Maven local repo used during development.
+.m2/
 
 # IDE & editor files
 .idea/
