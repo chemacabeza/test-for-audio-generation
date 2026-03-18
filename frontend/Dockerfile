@@ -11,7 +11,12 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 # Copy source before installing so COPY doesn't overwrite node_modules
 COPY . .
-RUN npm ci --include=dev && npm run build
+RUN npm config set fetch-retries 10 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set maxsockets 3 \
+    && npm install --include=dev --no-audit --no-fund \
+    && npm run build
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Stage 2: Serve with Nginx (tiny Alpine image)
