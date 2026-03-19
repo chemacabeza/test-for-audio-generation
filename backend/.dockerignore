@@ -1,17 +1,17 @@
 # Files/directories to exclude from the Docker build context.
-# Keeping the build context small speeds up `docker build`.
 
-# Maven build output — EXCLUDED except the fat JAR we copy in.
-# target/ is NOT excluded: we COPY target/*.jar into the image.
-# Only exclude the Maven local repo used during development.
+# Maven local repo (Maven runs inside Docker now)
 .m2/
+
+# Host build output — JAR is built inside Docker, not copied from the host
+target/
 
 # IDE & editor files
 .idea/
 *.iml
 .vscode/
 
-# Environment files — NEVER include secrets in the build context
+# Secrets — never in the build context
 .env
 *.env
 
@@ -23,5 +23,5 @@
 .DS_Store
 Thumbs.db
 
-# Documentation
+# Docs
 *.md

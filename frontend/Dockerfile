@@ -1,16 +1,34 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Pre-built image: the React app is built on the host before running docker build.
-#   npm install --include=dev && npm run build
-# Docker only packages the resulting dist/ — no Node/npm/network access required.
+# Multi-stage build — no Node.js required on the host.
+#
+# Stage 1: build the React app inside Docker using Node
+# Stage 2: serve the static dist/ with Nginx
+#
+# Works on macOS (Apple Silicon & Intel) and Ubuntu Linux.
 # ─────────────────────────────────────────────────────────────────────────────
+
+# ── Stage 1: Build ────────────────────────────────────────────────────────────
+FROM node:20-alpine AS build
+
+WORKDIR /build
+
+# Copy dependency descriptors first so Docker can cache the npm layer
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy source and build
+COPY . .
+RUN npm run build
+
+# ── Stage 2: Runtime ──────────────────────────────────────────────────────────
 FROM nginx:alpine AS runtime
 
 # Remove the default Nginx config and replace with ours
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/app.conf
 
-# Copy the pre-built React app from the host
-COPY dist /usr/share/nginx/html
+# Copy the built React app from the build stage
+COPY --from=build /build/dist /usr/share/nginx/html
 
 EXPOSE 80
 
